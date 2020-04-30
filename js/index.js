@@ -89,30 +89,52 @@ function refreshMapB (oldX, oldY) {
 	currentY = oldY;
 }
 
-// Überprüfen ob ein Event stattfindet - TODO: Refactor ->
-// Mehrere Funktionen? Algoryhtmus zur Berechnung der Position der Blase relativ zum Spieler ?
+// Überprüfen ob ein Event stattfindet
 function checkForEvent() {
-	// Bestimmtes Event findet statt
-	if(currentX == 190 && currentY == 470) {
-		// Überprüfe auf Mausklicks innerhalb des Spielfensters
-		// Bei Mausklick Event Funktion aufrufen - TODO: 
-		// Ausarbeitung einer Event Funktion!!!
-		cByID.addEventListener('click', test);
-		// Position der Blase an die Position des Spielers anpassen
-		bubbleX = currentX - 97;
-		bubbleY = currentY - 70;
-		// Blase auf Position zeichnen
-		c.drawImage(event1_img, bubbleX, bubbleY);
-		// Blase mit Text füllen 
-		c.fillText("Dorf Dremor",bubbleX + 50 ,bubbleY + 20);
-		c.fillText("Klicken um fortzufahren",bubbleX + 20 ,bubbleY + 37);
-	}else{
-		// Wenn kein Event stattfindet EventListener stoppen
-		cByID.removeEventListener('click', test);
+	// eventArray auf Übereinstimmung mit aktueller Position prüfen
+	eventArray.forEach(checkArray);
+	function checkArray (eventInfo) {
+		// Ein Event findet statt
+		if (currentX == eventInfo[0] && currentY == eventInfo[1]) {
+			// Übergebe die Informationen des Events an handleEvent
+			handleEvent(eventInfo[0], eventInfo[1], eventInfo[2], eventInfo[3], eventInfo[4], eventInfo[5]);
+		}
 	}
 }
 
-
+// Wertet übergebene Events aus
+// TODO: Eventtypen bestimmen, Zufälliges auftreten herbeiführen
+// eTL = eventTextLine
+function handleEvent (x, y, eTL1, eTL2, eTL3, eTL4) {
+	// Überprüfen ob ein Event übergeben wurde oder nur
+	// der EventListener abgeschaltet werden soll
+	if ( x != undefined ) {
+		// Überprüfe auf Mausklicks innerhalb des Spielfensters
+		cByID.addEventListener('click', handleClick);
+		// Sprechblase mit Text anzeigen
+		draw_bubble1(eTL1, eTL2);
+	}else{
+		// Fehlerausgabe falls ein Event fehlerhaft ist
+		console.log("Fehlerhaftes Event!");
+	}
+	// Funktion um auf Mausklick zu reagieren
+	function handleClick () {
+		// Aktuelle Position abgleichen mit stattfindendem Event
+		if ( x == currentX && y == currentY ) {
+			// Map neu laden um vorherige Blase zu löschen
+			refreshMap(currentX, currentY);
+			// Neue Sprechblase anzeigen
+			// TODO: Event Array um Inhalt für diese Blase zu erweitern
+			draw_bubble1(eTL3, eTL4);
+			// TODO Map ausblenden und mit Event fortfahren
+			// cByID.style.display = "none";
+		}else{
+			// Falls der Spieler den Eventbereich verlässt
+			// wird der EventListener gestoppt
+			cByID.removeEventListener('click', handleClick);
+		}
+	}
+}
 
 // Spieler Steuerung
 // Benutzereingabe überprüfen und Funktionen entsprechend aufrufen
@@ -174,9 +196,4 @@ function controlPlayerWithKeyboard(keyEvent) {
 document.getElementById("consoleOutput").onclick = function () {
 	console.log("X: " + currentX);
 	console.log("Y: " + currentY);
-}
-
-// Testfunktion die in der Konsole eine Reaktion auf den Aufruf erzeugt
-function test() {
-	console.log("clicked or pressed");
 }
