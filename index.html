@@ -2,8 +2,13 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<meta name="description" content="Projekt DRT ist ein Versuch ein lokales Mehrspieler Erlebnis mit Dungeons&Dragons Elementen zu erschaffen.">
+	<meta name="keywords" content="DRT, Typhus">
+	<meta name="author" content="David Rodenkirchen">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>DRT - v0.2</title>
 	<script type="text/javascript" src="./js/blockades.js"></script>
+	<script src="./js/events.js"></script>
 	<style type="text/css">
 		body {
 			margin: 0;
@@ -12,18 +17,20 @@
 		canvas {
 			border: 1px solid black;
 			background: #ccc;
+			display: block;
 		}
 	</style>
 </head>
 <body>
 	<center>
-	<h2>Projekt DRT - Version 0.2 - Movement und Eventhandling</h2>
+	<h2>Projekt DRT - Version 0.2</h2>
 	<canvas id="game"></canvas><br><button id="consoleOutput">Konsolenausgabe</button><br>
 	<button id="MoveUp">Nach Oben</button><br>
 	<button id="MoveLeft">Nach Links</button> - <button id="MoveRight">Nach Rechts</button><br>
 	<button id="MoveDown">Nach Unten</button>
 	</center>
 	<script src="./js/index.js"></script>
+	<script src="./js/draw_elements.js"></script>
 	
 </body>
 </html>
