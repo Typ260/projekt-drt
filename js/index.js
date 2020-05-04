@@ -1,19 +1,31 @@
 // Canvas initialisieren
-const canvas = document.querySelector('canvas');
+const canvas = document.getElementById("game");
 // Canvas Context Objekt in kürzere Variable packen
 const c = canvas.getContext('2d');
-// Gesamtes Canvas anhand der ID erfassen - für EventListener
-const cByID = document.getElementById("game");
-// Hintergrundbild laden
+// Canvas für Events initialisieren
+const canvasEvents = document.getElementById("event");
+// Canvas für Events Context Objekt in kürzere Variable packen
+const cEvents = canvasEvents.getContext('2d');
+// Eventcanvas standartmäßig ausblenden
+canvasEvents.style.display = "none";
+
+// Hintergrundbilder laden
+// Karte
 var map = new Image;
 map.src = "./img/map.png";
+// Event Hintergrund Gras
+var EventGrass = new Image;
+EventGrass.src = "./img/event_grass.png";
 
 // Eigenschaften für das Canvas festlegen
 // Höhe und Breite
 canvas.width = 600;
+canvasEvents.width = 600;
 canvas.height = 600;
+canvasEvents.height = 300;
 // Schriftart
 c.font = "10px Arial";
+cEvents.font = "10px Arial";
 
 // Spieler Eigenschaften festlegen
 var playerSizeWidth = 10;
@@ -31,11 +43,6 @@ var oldY;
 // Variable für Event Images initialisieren
 var bubbleX;
 var bubbleY;
-
-// TEST IMAGE DRAW EVENT
-var event1_img = new Image;
-event1_img.src = "./img/blase1.png";
-
 
 // Nach laden der Karte diese auf das Canvas rendern und Spieler initial platzieren
 window.onload = function () {
@@ -93,48 +100,16 @@ function refreshMapB (oldX, oldY) {
 function checkForEvent() {
 	// eventArray auf Übereinstimmung mit aktueller Position prüfen
 	eventArray.forEach(checkArray);
-	function checkArray (eventInfo) {
+	function checkArray (eventObj) {
 		// Ein Event findet statt
-		if (currentX == eventInfo[0] && currentY == eventInfo[1]) {
+		if (currentX == eventObj.x && currentY == eventObj.y) {
+			console.log("Event hier!");
 			// Übergebe die Informationen des Events an handleEvent
-			handleEvent(eventInfo[0], eventInfo[1], eventInfo[2], eventInfo[3], eventInfo[4], eventInfo[5]);
+			handleEvent(eventObj);
 		}
 	}
 }
 
-// Wertet übergebene Events aus
-// TODO: Eventtypen bestimmen, Zufälliges auftreten herbeiführen
-// eTL = eventTextLine
-function handleEvent (x, y, eTL1, eTL2, eTL3, eTL4) {
-	// Überprüfen ob ein Event übergeben wurde oder nur
-	// der EventListener abgeschaltet werden soll
-	if ( x != undefined ) {
-		// Überprüfe auf Mausklicks innerhalb des Spielfensters
-		cByID.addEventListener('click', handleClick);
-		// Sprechblase mit Text anzeigen
-		draw_bubble1(eTL1, eTL2);
-	}else{
-		// Fehlerausgabe falls ein Event fehlerhaft ist
-		console.log("Fehlerhaftes Event!");
-	}
-	// Funktion um auf Mausklick zu reagieren
-	function handleClick () {
-		// Aktuelle Position abgleichen mit stattfindendem Event
-		if ( x == currentX && y == currentY ) {
-			// Map neu laden um vorherige Blase zu löschen
-			refreshMap(currentX, currentY);
-			// Neue Sprechblase anzeigen
-			// TODO: Event Array um Inhalt für diese Blase zu erweitern
-			draw_bubble1(eTL3, eTL4);
-			// TODO Map ausblenden und mit Event fortfahren
-			// cByID.style.display = "none";
-		}else{
-			// Falls der Spieler den Eventbereich verlässt
-			// wird der EventListener gestoppt
-			cByID.removeEventListener('click', handleClick);
-		}
-	}
-}
 
 // Spieler Steuerung
 // Benutzereingabe überprüfen und Funktionen entsprechend aufrufen
@@ -196,4 +171,5 @@ function controlPlayerWithKeyboard(keyEvent) {
 document.getElementById("consoleOutput").onclick = function () {
 	console.log("X: " + currentX);
 	console.log("Y: " + currentY);
+	//randomEvent.listEventDetails();
 }
