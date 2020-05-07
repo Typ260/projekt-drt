@@ -103,7 +103,6 @@ function checkForEvent() {
 	function checkArray (eventObj) {
 		// Ein Event findet statt
 		if (currentX == eventObj.x && currentY == eventObj.y) {
-			console.log("Event hier!");
 			// Übergebe die Informationen des Events an handleEvent
 			handleEvent(eventObj);
 		}
@@ -171,5 +170,5 @@ function controlPlayerWithKeyboard(keyEvent) {
 document.getElementById("consoleOutput").onclick = function () {
 	console.log("X: " + currentX);
 	console.log("Y: " + currentY);
-	//randomEvent.listEventDetails();
+	player.listEntityDetails();
 }
