@@ -6,12 +6,15 @@ var eventArray = [];
 
 // Event Klasse
 class Event {
-	constructor(x, y, type, forced, encounterDialogue) {
+	constructor(x, y, type, forced, encounterDialogue, encounterDialogue2, player, enemy) {
 		this.x = x;
 		this.y = y;
 		this.type = type;
 		this.forced = forced;
 		this.encounterDialogue = encounterDialogue;
+		this.encounterDialogue2 = encounterDialogue2;
+		this.player = player;
+		this.enemy = enemy;
 	}
 	
 	listEventDetails() {
@@ -23,8 +26,8 @@ class Event {
 
 
 // Test Events hinzufügen
-randomDialogueEvent = new Event(190, 470, "Dialog", false, "Ein Dialog Event");
-randomFightEvent = new Event(180, 470, "Fight", true, "Ein Kampf Event");
+randomDialogueEvent = new Event(190, 470, "Dialog", false, "Fischerdorf Dremor", "Dremor wird betreten", player);
+randomFightEvent = new Event(180, 470, "Fight", true, "Ein Kampf Event", "", player2, testEnemy);
 eventArray.push(randomDialogueEvent);
 eventArray.push(randomFightEvent);
 
@@ -39,10 +42,10 @@ function handleEvent (eventObj) {
 		// Überprüfe auf Mausklicks innerhalb des Spielfensters
 		canvas.addEventListener('click', handleClick);
 		// Sprechblase mit Text anzeigen
-		draw_bubble1(eventObj.encounterDialogue, eventObj.type);
+		draw_bubble1(eventObj.encounterDialogue, "Klicken zum fortfahren");
 	}else{
 		// Fortfahren als hätte der Spieler geklickt
-		draw_bubble1(eventObj.encounterDialogue, eventObj.type);
+		draw_bubble1(eventObj.encounterDialogue, "wird geladen...");
 		// Kontrollpanel ausblenden
 		document.getElementById("controls").style.display = "none";
 		// Tastatureingabe ausschalten
@@ -57,8 +60,7 @@ function handleEvent (eventObj) {
 			// Map neu laden um vorherige Blase zu löschen
 			refreshMapB(currentX, currentY);
 			// Neue Sprechblase anzeigen
-			// TODO: Event Array um Inhalt für diese Blase zu erweitern
-			draw_bubble1("Blablabla", "TODO!!!");
+			draw_bubble1(eventObj.encounterDialogue2, "");
 			// Kontrollpanel ausblenden
 			document.getElementById("controls").style.display = "none";
 			// Tastatureingabe ausschalten
@@ -85,13 +87,17 @@ function handleEvent (eventObj) {
 			document.getElementById("event-container").innerHTML = "Dialog Event";
 		// Fight Event
 		} else if (eventObj.type == "Fight") {
-			document.getElementById("event-container").innerHTML = "Fight Event";
+			document.getElementById("event-container").innerHTML = "Spieler HP = " + eventObj.player.hp + " - Gegner HP = " + eventObj.enemy.hp;
+			document.getElementById("event-controls-fight").style.display ="block";
+			document.getElementById("slot1").innerHTML = eventObj.player.slot1[0];
+			document.getElementById("slot1").onclick = function () { eventObj.player.attackEnemy(testEnemy, 1); }
+			document.getElementById("slot2").innerHTML = eventObj.player.slot2[0];
+			document.getElementById("slot2").onclick = function () { eventObj.player.attackEnemy(testEnemy, 2); }
+			document.getElementById("slot3").innerHTML = eventObj.player.slot3[0];
+			document.getElementById("slot3").onclick = function () { eventObj.player.attackEnemy(testEnemy, 3); }
 		// Unbekannter Event Typ
 		} else {
 			document.getElementById("event-container").innerHTML = "Fehlerhaftes Event";
 		}
 	}
 }
-
-
-
