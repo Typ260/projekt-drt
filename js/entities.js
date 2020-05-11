@@ -19,22 +19,26 @@ class EntityNPC {
 		this.alive = true;
 		// Skillset
 		this.attackName = "generic Attack";
-		this.attackValue = 20;
+		this.attackValue = 5;
 	}
 	
-	listEntityDetails() {
-		console.log("Entity Type: " + this.type);
-		console.log("Entity Health Points: " + this.hp);
-		console.log("Entity Strength: " + this.strength);
-		console.log("Entity Dexterity: " + this.dexterity);
-		console.log("Entity Intelligence: " + this.intelligence);
-		console.log("Entity Charisma: " + this.charisma);
+	// Aktualisiert rechte Statusleiste mit aktuellen NPC Daten
+	updateStatusbarNPC() {
+		document.getElementById("statusbarNPCName").innerHTML = this.name;
+		if (this.type == "Enemy") {
+			document.getElementById("statusbarNPCType").style = "color:red";
+			document.getElementById("statusbarNPCType").innerHTML = "Feindlich";
+		}else{
+			document.getElementById("statusbarNPCType").style = "color:green";
+			document.getElementById("statusbarNPCType").innerHTML = "Freundlich";
+		}
+		document.getElementById("statusbarNPCHP").innerHTML = this.hp;
 	}
 }
 
 // Standart Entity Klasse für Spieler
 class EntityPlayer {
-	constructor(name, type, hp, strength, dexterity, intelligence, charisma) {
+	constructor(name, type, hp, strength, endurance, dexterity, intelligence, charisma) {
 		// Spielername
 		this.name = name;
 		// Typen = Warrior, Mage, Rogue
@@ -44,11 +48,14 @@ class EntityPlayer {
 		// Generische D&D Attribute
 		// Max 20 pro Attribut
 		this.strength = strength;
+		this.endurance = endurance;
 		this.dexterity = dexterity;
 		this.intelligence = intelligence;
 		this.charisma = charisma;
 		// Status (lebt/tot)
 		this.alive = true;
+		// Aktionspunkte
+		this.ap = undefined;
 		// Skillset generieren
 		this.generateSkillset();
 	}
@@ -139,46 +146,93 @@ class EntityPlayer {
 		} else {
 			this.slot4 = magischeSalbe;
 		}
+		// Aktionspunkte berechnen
+		if (this.endurance < 7) {
+			this.ap = 75;
+		} else if (this.endurance >= 7 && this.endurance <= 14) {
+			this.ap = 125;
+		} else {
+			this.ap = 175;
+		}
 	
 	}
 	
-	listEntityDetails() {
-		console.log("Player Type: " + this.type);
-		console.log("Player Health Points: " + this.hp);
-		console.log("Player Strength: " + this.strength);
-		console.log("Player Dexterity: " + this.dexterity);
-		console.log("Player Intelligence: " + this.intelligence);
-		console.log("Player Charisma: " + this.charisma);
+	// Aktualisiert linke Statusleiste mit aktuellen Spielerdaten
+	updateStatusbar() {
+		document.getElementById("statusbarPlayerName").innerHTML = this.name;
+		if (this.type == "Warrior") {
+			document.getElementById("statusbarPlayerClass").innerHTML = "Krieger";
+		} else if (this.type == "Rogue") {
+			document.getElementById("statusbarPlayerClass").innerHTML = "Schurke";
+		} else {
+			document.getElementById("statusbarPlayerClass").innerHTML = "Magier";
+		}
+		document.getElementById("statusbarPlayerHP").innerHTML = this.hp;
+		document.getElementById("statusbarPlayerAP").innerHTML = this.ap;
 	}
 	
 	attackEnemy (enemy, slot) {
-		// Test Angriff
+		// Variable für Spieler Angriffswert
+		var playerAttack;
+		// Name des Angriffs zwischenspeichern
+		var playerAttackName;
+		// Welcher Angriff wurde ausgewählt
 		switch (slot) {
 			case 1:
-				enemy.hp = enemy.hp - this.slot1[1];
-				this.hp = this.hp - enemy.attackValue;
+				// Spielerangriffswert ist ein zufälliger Wert
+				// zwischen der Hälfte und dem vollen Wert des Skills
+				playerAttack = getRnd(this.slot1[1]/2, this.slot1[1]);
+				// Gegner HP reduzieren - TODO: Verfehlchance?
+				enemy.hp = enemy.hp - playerAttack;
+				// Gegner greift den Spieler an
+				this.hp = this.hp - getRnd(enemy.attackValue/2, enemy.attackValue*2);
+				// Name des Angriffs in playerAttackName speichern
+				playerAttackName = this.slot1[0];
 				break;
 			case 2:
-				enemy.hp = enemy.hp - this.slot2[1];
-				this.hp = this.hp - enemy.attackValue;
+				playerAttack = getRnd(this.slot2[1]/2, this.slot2[1]);
+				enemy.hp = enemy.hp - playerAttack;
+				this.hp = this.hp - getRnd(enemy.attackValue/2, enemy.attackValue*2);
+				playerAttackName = this.slot2[0];
 				break;
 			case 3:
-				enemy.hp = enemy.hp - this.slot3[1];
+				playerAttack = getRnd(this.slot3[1]/2, this.slot3[1]);
+				enemy.hp = enemy.hp - playerAttack;
+				this.hp = this.hp - getRnd(enemy.attackValue/2, enemy.attackValue*2);
+				playerAttackName = this.slot3[0];
+				break;
+			case 4:
+				// Spielerangriffswert ist im Fall der Selbstheilung null
+				playerAttack = 0;
+				// Spieler heilt eigene HP
+				this.hp = this.hp + this.slot4[1];
+				// Gegner greift den Spieler an
 				this.hp = this.hp - enemy.attackValue;
+				playerAttackName = this.slot4[0];
 				break;
 		}
+		
+		// Ereignissprotokoll auf das Canvas zeichnen
+		draw_bubble2(this.name + " setzt " + playerAttackName + " ein.", this.name + " verursacht " + playerAttack + " Schaden");
 		// Sowohl Gegner als auch Spieler leben noch
 		if (enemy.hp > 0 && this.hp > 0) {
-			// Aktuelle Healthpoints anzeigen
-			document.getElementById("event-container").innerHTML = "Spieler HP = " + this.hp + " - Gegner HP = " + enemy.hp;
+			// Statusleisten aktualisieren
+			this.updateStatusbar();
+			enemy.updateStatusbarNPC();
 		// Spieler lebt, Gegner gestorben
 		} else if (enemy.hp <= 0 && this.hp > 0) {
+			// Statusleisten aktualisieren
+			this.updateStatusbar();
+			enemy.updateStatusbarNPC();
 			// Gegner Status auf tot setzen
 			enemy.alive = false;
 			// Meldung über erfolgreichen Kampf
 			document.getElementById("event-container").innerHTML = this.name + " besiegt Gegner " + enemy.name;
 		// Spieler stirbt
 		} else if ( this.hp <= 0 ) {
+			// Statusleisten aktualisieren
+			this.updateStatusbar();
+			enemy.updateStatusbarNPC();
 			this.alive = false;
 			document.getElementById("event-container").innerHTML = this.name + " wurde von " + enemy.name + " besiegt!";
 		} else {
@@ -188,9 +242,14 @@ class EntityPlayer {
 }
 
 
-// Test Gegner
+// Test Gegner - TODO : Gegner zufällig "zusammenbauen"
 testEnemy = new EntityNPC("Enemy", "Böser Oger", 100, 10, 10, 10, 10);
 
-// Test Spieler
-player = new EntityPlayer("David", "Warrior", 100, 6, 10, 20, 10);
-player2 = new EntityPlayer("Jessy", "Rogue", 100, 10, 10, 20, 10);
+// Test Spieler - TODO : PHP Landing Page mit POST-FORM für Spielerdaten und/oder Vollwertiges Login mit SQL
+player = new EntityPlayer("David", "Warrior", 100, 6, 10, 10, 20, 10);
+player2 = new EntityPlayer("Jessy", "Rogue", 100, 10, 10, 10, 20, 10);
+
+
+
+
+
