@@ -25,13 +25,18 @@ canvas.height = 600;
 canvasEvents.height = 300;
 // Schriftart
 c.font = "10px Arial";
-cEvents.font = "10px Arial";
+cEvents.font = "16px Arial";
 
 // Spieler Eigenschaften festlegen
 var playerSizeWidth = 10;
 var playerSizeHeight = 10;
 var playerStepSize = 10;
 var playerColor = "black";
+
+// Zufallsberechnung für EntityPlayer.attackEnemy()
+function getRnd(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
 
 // Startpunkt und Save für "Spieler" festlegen
 var currentX = 200;
@@ -48,7 +53,7 @@ var bubbleY;
 window.onload = function () {
 	c.drawImage(map, 0, 0);
 	c.fillStyle = playerColor;
-	c.fillRect(currentX, currentY, playerSizeWidth, playerSizeHeight);
+	refreshMap(currentX, currentY);
 }
 
 
@@ -69,6 +74,8 @@ function refreshMap (newX, newY) {
 	testForBlockade(block);
 	// Überprüfen ob auf dem aktuellen Feld ein Event statt findet
 	checkForEvent();
+	// Statusleisten aktualisieren - TODO: Spielerobjekt flexibel wählen
+	player2.updateStatusbar();
 }
 
 // Auf Blockade prüfen
@@ -168,7 +175,7 @@ function controlPlayerWithKeyboard(keyEvent) {
 
 // Funktionsknopf für Entwicklung, gibt z.b. aktuelle Koordinaten in der Konsole aus
 document.getElementById("consoleOutput").onclick = function () {
-	console.log("X: " + currentX);
-	console.log("Y: " + currentY);
-	player.listEntityDetails();
+	// console.log("X: " + currentX);
+	// console.log("Y: " + currentY);
+	draw_bubble2("Test Text in der ersten Zeile", "Ein weiterer Test Text");
 }

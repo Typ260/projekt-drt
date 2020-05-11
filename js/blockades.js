@@ -62,8 +62,6 @@ var tempy = 600;
 for (var i = 11; i > 0; i -= 1) {
 	tempx = tempx - 10;
 	tempy = tempy - 10;
-	console.log(tempx);
-	console.log(tempy);
 	var x = [tempx, tempy]; block.push(x);
 }
 

@@ -25,12 +25,46 @@
 		.event-controls-fight {
 			display: none;
 		}
+		
+		.stats-right {
+			display: none;
+		}
+		
 	</style>
 </head>
 <body>
 	<center>
 	<h2>Projekt DRT - Version 0.2</h2>
-	<canvas id="game"></canvas><canvas id="event"></canvas><br><button id="consoleOutput">Konsolenausgabe</button><br>
+	<table style="width:100%">
+		<tr>
+			<td valign="top">
+				<div id="stats-left" class="stats-left">
+					Aktueller Spieler:<br><br>
+					<center><p id="statusbarPlayerName">(SPIELERNAME)</p></center><br>
+					Klasse:<br><br>
+					<center><p id="statusbarPlayerClass">(KLASSE)</p></center><br>
+					Lebenspunkte:<br><br>
+					<center><p id="statusbarPlayerHP">(LEBENSPUNKTE)</p></center><br>
+					Aktionspunkte:<br><br>
+					<center><p id="statusbarPlayerAP">(AKTIONSPUNKTE)</p></center><br>
+				</div>
+			</td>
+			<td>
+				<center><canvas id="game"></canvas><canvas id="event"></canvas></center>
+			</td>
+			<td valign="top">
+				<div id="stats-right" class="stats-right">
+					Aktueller NPC:<br><br>
+					<center><p id="statusbarNPCName">(NPCNAME)</p></center><br>
+					Gesinnung:<br><br>
+					<center><p id="statusbarNPCType">(NPCTyp)</p></center><br>
+					Lebenspunkte:<br><br>
+					<center><p id="statusbarNPCHP">(NPCLEBENSPUNKTE)</p></center><br>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<br><button id="consoleOutput">Konsolenausgabe</button><br>
 	<div id="controls">
 	<button id="MoveUp">Nach Oben</button><br>
 	<button id="MoveLeft">Nach Links</button> - <button id="MoveRight">Nach Rechts</button><br>
@@ -39,7 +73,7 @@
 	<div id="event-container" class="event-container"></div><br>
 	<div id="event-controls-fight" class="event-controls-fight">
 	KAMPF - STEUERUNG:<br>
-	<button id="slot1"></button> - <button id="slot2"></button> - <button id="slot3"></button>
+	<button id="slot1"></button> - <button id="slot2"></button> - <button id="slot3"></button> - <button id="slot4"></button>
 	</div>
 	</center>
 	<script src="./js/index.js"></script>
