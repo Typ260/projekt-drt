@@ -176,6 +176,8 @@ class EntityPlayer {
 		var playerAttack;
 		// Name des Angriffs zwischenspeichern
 		var playerAttackName;
+		// Gegnerangriff berechnen
+		var enemyAttackValue = getRnd(enemy.attackValue/2, enemy.attackValue*2);
 		// Welcher Angriff wurde ausgewählt
 		switch (slot) {
 			case 1:
@@ -185,20 +187,20 @@ class EntityPlayer {
 				// Gegner HP reduzieren - TODO: Verfehlchance?
 				enemy.hp = enemy.hp - playerAttack;
 				// Gegner greift den Spieler an
-				this.hp = this.hp - getRnd(enemy.attackValue/2, enemy.attackValue*2);
+				this.hp = this.hp - enemyAttackValue;
 				// Name des Angriffs in playerAttackName speichern
 				playerAttackName = this.slot1[0];
 				break;
 			case 2:
 				playerAttack = getRnd(this.slot2[1]/2, this.slot2[1]);
 				enemy.hp = enemy.hp - playerAttack;
-				this.hp = this.hp - getRnd(enemy.attackValue/2, enemy.attackValue*2);
+				this.hp = this.hp - enemyAttackValue;
 				playerAttackName = this.slot2[0];
 				break;
 			case 3:
 				playerAttack = getRnd(this.slot3[1]/2, this.slot3[1]);
 				enemy.hp = enemy.hp - playerAttack;
-				this.hp = this.hp - getRnd(enemy.attackValue/2, enemy.attackValue*2);
+				this.hp = this.hp - enemyAttackValue;
 				playerAttackName = this.slot3[0];
 				break;
 			case 4:
@@ -207,13 +209,17 @@ class EntityPlayer {
 				// Spieler heilt eigene HP
 				this.hp = this.hp + this.slot4[1];
 				// Gegner greift den Spieler an
-				this.hp = this.hp - enemy.attackValue;
+				this.hp = this.hp - enemyAttackValue;
 				playerAttackName = this.slot4[0];
 				break;
 		}
 		
-		// Ereignissprotokoll auf das Canvas zeichnen
-		draw_bubble2(this.name + " setzt " + playerAttackName + " ein.", this.name + " verursacht " + playerAttack + " Schaden");
+		// TODO: Animation Spielerangriff
+		// Ereignissprotokoll des Spielerangriffs auf das Canvas zeichnen
+		setTimeout(() => { draw_bubble2(this.name + " setzt " + playerAttackName + " ein.", this.name + " verursacht " + playerAttack + " Schaden"); }, 500);
+		// TODO: Animation Gegnerangriff
+		// Ereignissprotokoll des Gegnerangriffs auf das Canvas zeichnen - TODO: Delay an Angriffsanimation anpassen
+		setTimeout(() => { draw_bubble2(enemy.name + " setzt " + enemy.attackName + " ein.", enemy.name + " verursacht " + enemyAttackValue + " Schaden"); }, 2000);
 		// Sowohl Gegner als auch Spieler leben noch
 		if (enemy.hp > 0 && this.hp > 0) {
 			// Statusleisten aktualisieren
