@@ -150,9 +150,9 @@ class EntityPlayer {
 		if (this.endurance < 7) {
 			this.ap = 75;
 		} else if (this.endurance >= 7 && this.endurance <= 14) {
-			this.ap = 125;
+			this.ap = 100;
 		} else {
-			this.ap = 175;
+			this.ap = 125;
 		}
 	
 	}
@@ -178,6 +178,8 @@ class EntityPlayer {
 		var playerAttackName;
 		// Gegnerangriff berechnen
 		var enemyAttackValue = getRnd(enemy.attackValue/2, enemy.attackValue*2);
+		// Controlpanel abschalten
+		disableAtkCtl(true);
 		// Welcher Angriff wurde ausgewählt
 		switch (slot) {
 			case 1:
@@ -190,18 +192,22 @@ class EntityPlayer {
 				this.hp = this.hp - enemyAttackValue;
 				// Name des Angriffs in playerAttackName speichern
 				playerAttackName = this.slot1[0];
+				// Aktionspunkte abziehen
+				this.ap = this.ap - this.slot1[2];
 				break;
 			case 2:
 				playerAttack = getRnd(this.slot2[1]/2, this.slot2[1]);
 				enemy.hp = enemy.hp - playerAttack;
 				this.hp = this.hp - enemyAttackValue;
 				playerAttackName = this.slot2[0];
+				this.ap = this.ap - this.slot2[2];
 				break;
 			case 3:
 				playerAttack = getRnd(this.slot3[1]/2, this.slot3[1]);
 				enemy.hp = enemy.hp - playerAttack;
 				this.hp = this.hp - enemyAttackValue;
 				playerAttackName = this.slot3[0];
+				this.ap = this.ap - this.slot3[2];
 				break;
 			case 4:
 				// Spielerangriffswert ist im Fall der Selbstheilung null
@@ -211,6 +217,7 @@ class EntityPlayer {
 				// Gegner greift den Spieler an
 				this.hp = this.hp - enemyAttackValue;
 				playerAttackName = this.slot4[0];
+				this.ap = this.ap - this.slot4[2];
 				break;
 		}
 		
@@ -218,8 +225,16 @@ class EntityPlayer {
 		// Ereignissprotokoll des Spielerangriffs auf das Canvas zeichnen
 		setTimeout(() => { draw_bubble2(this.name + " setzt " + playerAttackName + " ein.", this.name + " verursacht " + playerAttack + " Schaden"); }, 500);
 		// TODO: Animation Gegnerangriff
-		// Ereignissprotokoll des Gegnerangriffs auf das Canvas zeichnen - TODO: Delay an Angriffsanimation anpassen
-		setTimeout(() => { draw_bubble2(enemy.name + " setzt " + enemy.attackName + " ein.", enemy.name + " verursacht " + enemyAttackValue + " Schaden"); }, 2000);
+		setTimeout(() => {
+			// Ereignissprotokoll des Gegnerangriffs auf das Canvas zeichnen - TODO: Delay an Angriffsanimation anpassen
+			draw_bubble2(enemy.name + " setzt " + enemy.attackName + " ein.", enemy.name + " verursacht " + enemyAttackValue + " Schaden");
+			// Steuerungsbuttons selektiv reaktivieren
+			if (this.ap >= this.slot1[2]) {disableAtkCtl("oneOn");}
+			if (this.ap >= this.slot2[2]) {disableAtkCtl("twoOn");}
+			if (this.ap >= this.slot3[2]) {disableAtkCtl("threeOn");}
+			if (this.ap >= this.slot4[2]) {disableAtkCtl("fourOn");}
+			
+		}, 2000);
 		// Sowohl Gegner als auch Spieler leben noch
 		if (enemy.hp > 0 && this.hp > 0) {
 			// Statusleisten aktualisieren
@@ -233,14 +248,16 @@ class EntityPlayer {
 			// Gegner Status auf tot setzen
 			enemy.alive = false;
 			// Meldung über erfolgreichen Kampf
-			document.getElementById("event-container").innerHTML = this.name + " besiegt Gegner " + enemy.name;
+			setTimeout(() => { draw_bubble2(this.name + " besiegt " + enemy.name + ".", " "); disableAtkCtl(true);}, 2001);
 		// Spieler stirbt
 		} else if ( this.hp <= 0 ) {
 			// Statusleisten aktualisieren
 			this.updateStatusbar();
 			enemy.updateStatusbarNPC();
+			// Spielerstatus auf tot setzen
 			this.alive = false;
-			document.getElementById("event-container").innerHTML = this.name + " wurde von " + enemy.name + " besiegt!";
+			// Meldung übder tot
+			setTimeout(() => { draw_bubble2(this.name + " wurde von " + enemy.name + " besiegt.", " "); disableAtkCtl(true); }, 2001);
 		} else {
 			document.getElementById("event-container").innerHTML = "FEHLER";
 		}
