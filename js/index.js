@@ -8,6 +8,12 @@ const canvasEvents = document.getElementById("event");
 const cEvents = canvasEvents.getContext('2d');
 // Eventcanvas standartmäßig ausblenden
 canvasEvents.style.display = "none";
+// Canvas für Event-Animationen initialisieren
+const canvasEventsAni = document.getElementById("eventAnimation");
+// Canvas für Event-Animationen Context Objekt in kürzere Variable packen
+const cEventsAni = canvasEventsAni.getContext('2d');
+// Event-Animationencanvas standartmäßig ausblenden
+canvasEventsAni.style.display = "none";
 
 // Hintergrundbilder laden
 // Karte
@@ -21,8 +27,10 @@ EventGrass.src = "./img/event_grass.png";
 // Höhe und Breite
 canvas.width = 600;
 canvasEvents.width = 600;
+canvasEventsAni.width = 600;
 canvas.height = 600;
 canvasEvents.height = 300;
+canvasEventsAni.height = 300;
 // Schriftart
 c.font = "10px Arial";
 cEvents.font = "16px Arial";
@@ -173,9 +181,53 @@ function controlPlayerWithKeyboard(keyEvent) {
   }
 }
 
+// (De)aktivieren der Kontrollbuttons für Fight-Events
+function disableAtkCtl (x) {
+	switch (x) {
+		case true:
+			document.getElementById("slot1").disabled = true; 
+			document.getElementById("slot2").disabled = true; 
+			document.getElementById("slot3").disabled = true; 
+			document.getElementById("slot4").disabled = true;
+			break;
+		case false:
+			document.getElementById("slot1").disabled = false; 
+			document.getElementById("slot2").disabled = false; 
+			document.getElementById("slot3").disabled = false; 
+			document.getElementById("slot4").disabled = false; 
+			break;
+		case "oneOn":
+			document.getElementById("slot1").disabled = false;
+			break;
+		case "oneOff":
+			document.getElementById("slot1").disabled = true;
+			break;
+		case "twoOn":
+			document.getElementById("slot2").disabled = false;
+			break;
+		case "twoOff":
+			document.getElementById("slot2").disabled = true;
+			break;
+		case "threeOn":
+			document.getElementById("slot3").disabled = false;
+			break;
+		case "threeOff":
+			document.getElementById("slot3").disabled = true;
+			break;
+		case "fourOn":
+			document.getElementById("slot4").disabled = false;
+			break;
+		case "fourOff":
+			document.getElementById("slot4").disabled = true;
+			break;
+	}
+}
+
+
 // Funktionsknopf für Entwicklung, gibt z.b. aktuelle Koordinaten in der Konsole aus
 document.getElementById("consoleOutput").onclick = function () {
 	// console.log("X: " + currentX);
 	// console.log("Y: " + currentY);
-	draw_bubble2("Test Text in der ersten Zeile", "Ein weiterer Test Text");
+	// draw_bubble2("Test Text in der ersten Zeile", "Ein weiterer Test Text");
+
 }
