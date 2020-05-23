@@ -6,6 +6,7 @@ bubble1.src = "./img/blase1.png";
 var bubble2 = new Image;
 bubble2.src = "./img/blase2.png";
 
+// Normale Sprechblase auf der Map über dem Spieler
 function draw_bubble1(line1, line2) {
 	// Position der Blase an die Position des Spielers anpassen
 	bubbleX = currentX - 97;
@@ -17,6 +18,7 @@ function draw_bubble1(line1, line2) {
 	c.fillText(line2,bubbleX + 20 ,bubbleY + 37);
 }
 
+// Status "Blase" für Fight-Events
 function draw_bubble2(line1, line2) {
 	cEvents.drawImage(bubble2, 150, 240);
 	cEvents.fillText(line1, 162, 264);

@@ -29,12 +29,21 @@
 			display: none;
 		}
 		
+		#layer {
+		  position: absolute; 
+		  left: 0; 
+		  right: 0; 
+		  margin-left: auto; 
+		  margin-right: auto; 
+		  width: 600px; /* Need a specific value to work */
+		}
+		
 	</style>
 </head>
 <body>
 	<center>
 	<h2>Projekt DRT - Version 0.2</h2>
-	<table style="width:100%">
+	<table style="width:100%; border:1px">
 		<tr>
 			<td valign="top" width="150">
 				<div id="stats-left" class="stats-left">
@@ -48,14 +57,12 @@
 					<center><p id="statusbarPlayerAP">(AKTIONSPUNKTE)</p></center><br>
 				</div>
 			</td>
-			<td valign="top" width="600">
-				<center>
-					<div id="canvasAll" style="position: relative;">
-						<canvas id="game" style="position: absolute; z-index: 0;"></canvas>
-						<canvas id="event" style="position: absolute; z-index: 1;"></canvas>
-						<canvas id="eventAnimation" style="position: absolute; z-index: 2;"></canvas>
-					</div>
-				</center>
+			<td valign="top" height="600px">
+				<div class="layer" id="layer">
+				<canvas id="game" style="position: absolute; left: 0%;z-index: 0;"></canvas>
+				<canvas id="event" style="position: absolute; left: 0%;z-index: 1;"></canvas>
+				<canvas id="eventAnimation" style="position: absolute; left: 0%;z-index: 2;"></canvas>
+				</div>
 			</td>
 			<td valign="top" width="150">
 				<div id="stats-right" class="stats-right">
@@ -70,10 +77,9 @@
 		</tr>
 	</table>
 	<div id="controls">
-	<br><br>
-	<button id="MoveUp">Nach Oben</button><br>
-	<button id="MoveLeft">Nach Links</button> - <button id="MoveRight">Nach Rechts</button><br>
-	<button id="MoveDown">Nach Unten</button>
+		<button id="MoveUp">Nach Oben</button><br>
+		<button id="MoveLeft">Nach Links</button> - <button id="MoveRight">Nach Rechts</button><br>
+		<button id="MoveDown">Nach Unten</button>
 	</div>
 	<div id="event-container" class="event-container"></div>
 	<div id="event-controls-fight" class="event-controls-fight">
