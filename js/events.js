@@ -9,11 +9,17 @@ class Event {
 	constructor(x, y, type, forced, encounterDialogue, encounterDialogue2, player, enemy) {
 		this.x = x;
 		this.y = y;
+		// Typ des Events -> "Fight" oder "Dialog"
 		this.type = type;
+		// True = Spieler wird gezwungen am Event "teilzunehmen"
 		this.forced = forced;
+		// Erste Zeile der Sprechblase
 		this.encounterDialogue = encounterDialogue;
+		// Zweite Zeile der Sprechblase
 		this.encounterDialogue2 = encounterDialogue2;
+		// TODO: Spieler flexibel wählen
 		this.player = player;
+		// Hier wird das Enemy Objekt aus ./entities.js übergeben
 		this.enemy = enemy;
 	}
 	
@@ -79,6 +85,8 @@ function handleEvent (eventObj) {
 		canvas.style.display = "none";
 		// Event Canvas einblenden
 		canvasEvents.style.display = "block";
+		// Event Canvas für Animationen einblenden
+		canvasEventsAni.style.display = "block";
 		// Hintergrund laden - TODO: Hintergrund passend auswählen
 		cEvents.drawImage(EventGrass, 0, 0);
 		// Statusleiste des NPC einblenden
