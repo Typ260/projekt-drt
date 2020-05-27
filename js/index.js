@@ -227,7 +227,5 @@ function disableAtkCtl (x) {
 // Funktionsknopf für Entwicklung, gibt z.b. aktuelle Koordinaten in der Konsole aus
 document.getElementById("consoleOutput").onclick = function () {
 	// console.log("X: " + currentX);
-	// console.log("Y: " + currentY);
-	// draw_bubble2("Test Text in der ersten Zeile", "Ein weiterer Test Text");
 
 }
