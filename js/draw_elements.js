@@ -15,9 +15,11 @@ class animation {
 	
 	// Animation starten
 	animate(x) {
+		// draw Funktion an diese Instanz des Objektes binden
+		var draw_bound = this.draw.bind(this);
 		// Startet die draw Methode im Interval - TODO: Interval flexibel gestalten
 		if (x == true) {
-			this.aniID = setInterval(this.draw, 200, this.aniSource, this.posx, this.posy);
+			this.aniID = setInterval(draw_bound, 200);
 		// Stoppt die Animation und entfernt letzten Frame
 		} else if (x == false) {
 			clearInterval(this.aniID);
@@ -27,9 +29,9 @@ class animation {
 	}
 	
 	// Einzelnes Bild darstellen
-	draw(arrayOfPictures, x, y) {
-		// Array mit Bildern übergeben - FIXME: Warum erkennt diese Methode "this.aniSource" nicht?
-		var aOP = arrayOfPictures;
+	draw() {
+		// Array mit Bildern übergeben
+		var aOP = this.aniSource;
 		// Nächsten logischen Frame anhand der maximalen Anzahl der Bilder
 		// und des zuletzt gezeigten Frames wählen
 		if (this.currentFrame < (aOP.length - 1)) {
@@ -39,9 +41,9 @@ class animation {
 			this.currentFrame = 0;
 		}
 		// Letzten Frame löschen bevor der neue Frame gezeigt wird
-		cEventsAni.clearRect(x, y, aOP[this.currentFrame].width, aOP[this.currentFrame].height);
+		cEventsAni.clearRect(this.posx, this.posy, aOP[this.currentFrame].width, aOP[this.currentFrame].height);
 		// Aktuellen Frame zeigen
-		cEventsAni.drawImage(aOP[this.currentFrame], x, y);
+		cEventsAni.drawImage(aOP[this.currentFrame], this.posx, this.posy);
 	}
 }
 	
