@@ -6,4 +6,4 @@ Es nutzt das HTML5/JavaScript Canvas um Grafiken darzustellen.
 Dieses Projekt ist vorwiegend zum sammeln von Erfahrungen gedacht und nutzt demnach keine Frameworks.
 
 
-Aktueller Projektstatus: On hold
+Aktueller Projektstatus: On-hold
