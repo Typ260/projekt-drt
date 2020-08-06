@@ -7,5 +7,3 @@ Dieses Projekt ist vorwiegend zum sammeln von Erfahrungen gedacht und nutzt demn
 
 
 Aktueller Projektstatus: On-Hold
-
-testbranch
